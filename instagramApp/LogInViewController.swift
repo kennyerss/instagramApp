@@ -43,7 +43,7 @@ class LogInViewController: UIViewController {
         let username = userNameField.text
         let password = passwordField.text
         
-        PFUser.logInWithUsername(inBackground: username as! String, password: password as! String)
+        PFUser.logInWithUsername(inBackground: username!, password: password!)
         {
             (user, error) in
             if user != nil {
