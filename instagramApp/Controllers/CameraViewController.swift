@@ -7,6 +7,7 @@
 
 import UIKit
 import AlamofireImage
+import Parse
 
 // Adds picker controller delegate to pick the image to choose on camera
 class CameraViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate  {
@@ -23,6 +24,29 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     @IBAction func onSubmit(_ sender: Any) {
+        // Save objects through Parse
+        let post = PFObject(className: "Posts")
+        
+        post["caption"] = commentText.text!
+        post["author"] = PFUser.current()!
+        
+        // Grab image data
+        let imageData = cameraImageView.image!.pngData()
+        
+        let file = PFFileObject(name: "image.png", data: imageData!)
+        
+        post["image"] = file
+        
+        // Save post in background
+        post.saveInBackground { (success, error) in
+            if success {
+                self.dismiss(animated: true, completion: nil)
+                print("Post saved!")
+            } else {
+                print("Post unsuccessful: \(error)")
+            }
+            
+        }
     }
     
     // When image is tapped, launches camera
