@@ -109,13 +109,13 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7kc-p5-sfE">
-                                                    <rect key="frame" x="8" y="393" width="47.666666666666664" height="21"/>
+                                                    <rect key="frame" x="15.999999999999996" y="393" width="47.666666666666657" height="21"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Comment" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bud-1E-BDM">
-                                                    <rect key="frame" x="63.666666666666657" y="393" width="318.33333333333337" height="20.333333333333314"/>
+                                                    <rect key="frame" x="71.666666666666657" y="393" width="310.33333333333337" height="20.333333333333314"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -129,7 +129,7 @@
                                                 <constraint firstItem="bud-1E-BDM" firstAttribute="leading" secondItem="7kc-p5-sfE" secondAttribute="trailing" constant="8" id="QMs-ob-aEr"/>
                                                 <constraint firstItem="7kc-p5-sfE" firstAttribute="top" secondItem="5tu-bu-Wik" secondAttribute="bottom" constant="8" id="Xcm-Bq-W80"/>
                                                 <constraint firstAttribute="trailing" secondItem="bud-1E-BDM" secondAttribute="trailing" constant="8" id="jvK-fU-W3X"/>
-                                                <constraint firstItem="7kc-p5-sfE" firstAttribute="leading" secondItem="4gD-dj-3ff" secondAttribute="leading" constant="8" id="wLy-xn-wnL"/>
+                                                <constraint firstItem="7kc-p5-sfE" firstAttribute="leading" secondItem="4gD-dj-3ff" secondAttribute="leading" constant="16" id="wLy-xn-wnL"/>
                                                 <constraint firstItem="5tu-bu-Wik" firstAttribute="leading" secondItem="4gD-dj-3ff" secondAttribute="leading" constant="8" id="wj2-2j-1oC"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -171,8 +171,8 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="commentLabel" destination="shr-Rs-AyA" id="Aap-XU-6Kc"/>
-                                            <outlet property="userLabel" destination="xAR-OP-zCt" id="oYn-Vi-jkq"/>
+                                            <outlet property="commentLabel" destination="shr-Rs-AyA" id="hQe-Dz-xUc"/>
+                                            <outlet property="userNameLabel" destination="xAR-OP-zCt" id="giS-nH-rak"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="AddCommentCell" id="GFz-9A-5te">

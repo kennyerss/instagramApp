@@ -6,12 +6,10 @@
 //
 
 import UIKit
-import Parse
-import AlamofireImage
 
 class CommentTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var userLabel: UILabel!
+    @IBOutlet weak var userNameLabel: UILabel!
     
     @IBOutlet weak var commentLabel: UILabel!
     

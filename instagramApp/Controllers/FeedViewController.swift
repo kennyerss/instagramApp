@@ -12,13 +12,15 @@ import MessageInputBar
 
 class FeedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MessageInputBarDelegate {
     
+    let commentBar = MessageInputBar()
+    var showCommentBar = false
     // Create array of posts
     var posts = [PFObject]()
-    var showCommentBar = false
+    
     var selectedPost: PFObject!
     
     @IBOutlet weak var tableView: UITableView!
-    let commentBar = MessageInputBar()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,11 +38,10 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         // Notify the notification center and hides the keyboard
         let center = NotificationCenter.default
-        center.addObserver(self, selector: #selector(hideKeyboard(note: )), name: UIResponder.keyboardWillHideNotification, object: nil)
+        center.addObserver(self, selector: #selector(keyboardWillBeHidden(note:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    @objc func hideKeyboard(note: Notification) {
-        // Clear text field
+    @objc func keyboardWillBeHidden(note: Notification) {
         commentBar.inputTextView.text = nil
         showCommentBar = false
         becomeFirstResponder()
@@ -72,37 +73,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-    // When comment bar has been sent
-    func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
-        // Create the comment
-        let comment = PFObject(className: "Comments")
-        comment["text"] = text
-        comment["post"] = selectedPost
-        comment["author"] = PFUser.current()
-
-        // Relationship between text, post, and author
-        selectedPost.add(comment, forKey: "comments")
-
-        // Save the post, and also save the comment
-        selectedPost.saveInBackground { (success, error) in
-            if success {
-                print("Comment saved")
-            } else {
-                print("Error saving comment")
-            }
-        }
-        
-        tableView.reloadData()
-        
-        // Clear and dismiss input bar
-        commentBar.inputTextView.text = nil
-        
-        showCommentBar = false
-        becomeFirstResponder()
-        commentBar.inputTextView.resignFirstResponder()
-        
-    }
-        
+  
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Get the number of comments
         let post = posts[section]
@@ -120,50 +91,49 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        // Grab our posts
-        let post = posts[indexPath.row]
+        let post = posts[indexPath.section]
         let comments = (post["comments"] as? [PFObject]) ?? []
         
-        // Post cell is always the 0th row
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "PostTableViewCell") as! PostTableViewCell
+            
             
             let user = post["author"] as! PFUser
             cell.userNameLabel.text = user.username
             
-            cell.captionLabel.text = post["caption"] as! String
+            cell.captionLabel.text = post["caption"] as? String
             
             let imageFile = post["image"] as! PFFileObject
             let urlString = imageFile.url!
-            let url = URL(string: urlString)!
+            let url = URL(string: urlString)
             
-            cell.photoView.af.setImage(withURL: url)
+            cell.photoView.af.setImage(withURL: url!)
             
             return cell
-            
-            // Otherwise, need another view
         } else if indexPath.row <= comments.count {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CommentTableViewCell") as! CommentTableViewCell
             
-            // Bring the first comment
             let comment = comments[indexPath.row - 1]
+            
             cell.commentLabel.text = comment["text"] as? String
             
             let user = comment["author"] as! PFUser
-            cell.userLabel.text = user.username
+            
+            cell.userNameLabel.text = user.username
+            
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "AddCommentCell")!
             
             return cell
         }
-    
+        
+        
     }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let post = posts[indexPath.section]
         
-        let comments = (post["comments"] as? [PFObject]) ?? []
+        let comments = post["comments"] as? [PFObject] ?? []
         
         // If last cell, show comments
         if indexPath.row == comments.count + 1 {
@@ -175,6 +145,40 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
 
     }
+    
+    // When comment bar has been sent
+    func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
+        // Create the comment
+        let comment = PFObject(className: "comments")
+        comment["text"] = text
+        comment["post"] = selectedPost
+        comment["author"] = PFUser.current()
+
+        // Relationship between text, post, and author
+        selectedPost.add(comment, forKey: "comments")
+
+        // Save the post, and also save the comment
+        selectedPost.saveInBackground { (success, error) in
+            if success {
+                print("Comment saved")
+            } else {
+                print("Error saving comment")
+            }
+            
+            self.tableView.reloadData()
+        }
+        
+       
+        
+        // Clear and dismiss input bar
+        commentBar.inputTextView.text = nil
+        
+        showCommentBar = false
+        becomeFirstResponder()
+        commentBar.inputTextView.resignFirstResponder()
+        
+    }
+    
     /*
     // MARK: - Navigation
 
